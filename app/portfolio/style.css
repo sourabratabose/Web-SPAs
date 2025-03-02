@@ -1,0 +1,28 @@
+@import "tailwindcss";
+@config "./tailwind.config.js";
+
+@import "@radix-ui/colors/gray.css";
+@import "@radix-ui/colors/iris.css";
+@import "@radix-ui/colors/gray-alpha.css";
+@import "@radix-ui/colors/iris-alpha.css";
+
+*::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track{
+  border-radius: 20px;
+  background-color: var(--gray-a5);
+}
+*::-webkit-scrollbar-track:hover{
+  background-color: var(--gray-7);
+}
+
+*::-webkit-scrollbar-thumb{
+  border-radius: 20px;
+  background-color: var(--iris-a7);
+}
+*::-webkit-scrollbar-thumb:hover{
+  background-color: var(--iris-9);
+}

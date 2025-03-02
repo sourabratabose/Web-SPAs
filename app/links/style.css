@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@config "./tailwind.config.js";
+
+*::-webkit-scrollbar{
+  display: none;
+}
+* {
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}

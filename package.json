@@ -1,0 +1,21 @@
+{
+  "name": "web-spas-[sourabratabose.dev]",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "scripts": {
+    "dev": "vite serve ./app/links"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "workspaces": [
+    "app/*"
+  ],
+  "dependencies": {
+    "@radix-ui/colors": "^3.0.0",
+    "@radix-ui/react-accordion": "^1.2.3"
+  }
+}
