@@ -1,14 +1,13 @@
-import { lazy, Suspense, useContext } from "react";
-import { Container, Flex, Spinner, Theme } from "@radix-ui/themes";
-import { Toast } from "radix-ui";
+import { useContext } from "react";
+import { Container, Flex, Theme } from "@radix-ui/themes";
 import ThemeContextData from "./types/ThemeContextData";
 import { ThemePresets } from "./contexts/ThemeContext";
 import PageDataContext from "./contexts/PageDataContext";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import Intro from "./components/Intro";
+import Hero from "./components/Hero";
 import Links from "./components/Links";
-const Actions = lazy(() => import("./components/Actions"));
+import Actions from "./components/Actions";
 
 function App() {
   const { currentTheme }: ThemeContextData = useContext(ThemePresets);
@@ -21,6 +20,7 @@ function App() {
         align={"center"}
         pt={"80px"}
         mx={"5"}
+        mb={"5"}
       >
         <Flex
           direction={"column"}
@@ -29,22 +29,11 @@ function App() {
           justify={"start"}
           height={"100%"}
         >
-          <Suspense
-            fallback={
-              <Flex align={"center"} justify={"center"} my={"3"} p={"3"}>
-                <Spinner size={"3"} />
-              </Flex>
-            }
-          >
-            <PageDataContext>
-              <Intro />
-              <Links />
-            </PageDataContext>
-          </Suspense>
-          <Toast.Provider swipeDirection={"right"} swipeThreshold={100}>
-            <Actions />
-            <Toast.Viewport className="fixed bottom-15 right-5 z-10 m-0 flex flex-col-reverse gap-5 outline-none max-h-64 list-none" />
-          </Toast.Provider>
+          <PageDataContext>
+            <Hero />
+            <Links />
+          </PageDataContext>
+          <Actions />
         </Flex>
       </Container>
       <Footer />

@@ -8,7 +8,7 @@ const app = new Elysia();
 //Configuration
 app.all("/*", ({ error }) => error(501, "Not Implemented"));
 
-app.group("/public/api", (app) => {
+app.group("/api", (app) => {
   app.post("/messageRequest", ({ body, set, headers, error }) => {
     if (headers["Content-Type"] != "application/json" || typeof body != "string") return error(400, "Bad Request")
     try {

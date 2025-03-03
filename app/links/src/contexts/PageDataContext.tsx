@@ -16,7 +16,7 @@ const defaultValue = {
   },
   linkSections: [
     {
-      sectionHeading: "socials",
+      sectionHeading: "Socials",
       links: [
         {
           icon: "",
@@ -41,7 +41,7 @@ const defaultValue = {
       ],
     },
     {
-      sectionHeading: "work",
+      sectionHeading: "Work",
       links: [
         {
           icon: "",
@@ -66,7 +66,7 @@ const defaultValue = {
       ],
     },
     {
-      sectionHeading: "others",
+      sectionHeading: "Others",
       links: [
         {
           icon: "",

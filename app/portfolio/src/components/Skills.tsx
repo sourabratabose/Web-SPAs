@@ -1,59 +1,11 @@
 import { Section, Flex, Heading, Badge } from "@radix-ui/themes";
 import SkillData from "../types/SkillData";
+import { Fragment } from "react/jsx-runtime";
+import { useContext } from "react";
+import { PageData } from "../contexts/PageDataContext";
 
 export default function Skills() {
-  const skillData: SkillData[] = [
-    {
-      category: "Languages",
-      skills: [
-        "Javascript",
-        "Typescript",
-        "C",
-        "C++",
-        "Rust",
-        "Java",
-        "Python",
-      ],
-      color: "blue",
-    },
-    {
-      category: "Database and ORM",
-      skills: [
-        "PostgreSQL",
-        "MySQL",
-        "MongoDB",
-        "Redis",
-        "DrizzleORM",
-        "Mongoose",
-      ],
-      color: "red",
-    },
-    {
-      category: "Frameworks and Runtimes",
-      skills: [
-        "BunJS",
-        "NextJS",
-        "ReactJS",
-        "ElysiaJS",
-        "BetterAuthJS",
-        "ReactNative",
-        "Anchor",
-      ],
-      color: "amber",
-    },
-    {
-      category: "DevOps and Tools",
-      skills: [
-        "Git",
-        "Docker",
-        "Kubernetes",
-        "GitHub Actions",
-        "Forage",
-        "Grafana + Loki",
-      ],
-      color: "lime",
-    },
-  ];
+  const { skills: skillData } = useContext(PageData);
   return (
     <Section p={"3"} asChild={true}>
       <Flex direction={"column"} gap={"5"} width={"100%"}>
@@ -62,9 +14,8 @@ export default function Skills() {
         </Heading>
         {skillData.map((val: SkillData, idx: number) => {
           return (
-            <>
+            <Fragment key={idx}>
               <Heading
-                key={idx}
                 align={"left"}
                 color={"gray"}
                 weight={"regular"}
@@ -75,12 +26,12 @@ export default function Skills() {
               </Heading>
               <Flex direction={"row"} wrap={"wrap"} gap={"3"} key={idx}>
                 {val.skills.map((skill: string, innerIdx: number) => (
-                  <Badge key={innerIdx} color={val.color} size={"3"}>
+                  <Badge key={idx * 10 + innerIdx} color={val.color} size={"3"}>
                     {skill}
                   </Badge>
                 ))}
               </Flex>
-            </>
+            </Fragment>
           );
         })}
       </Flex>

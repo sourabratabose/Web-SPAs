@@ -9,38 +9,12 @@ import {
   Link,
   Button,
 } from "@radix-ui/themes";
-import ProjectData from "../types/ProjectData";
 import { TriangleRightIcon } from "@radix-ui/react-icons";
+import { useContext } from "react";
+import { PageData } from "../contexts/PageDataContext";
 
 export default function Projects() {
-  const data: ProjectData[] = [
-    {
-      img: "",
-      imgFallback: "Socket and SSE based Customer Support Portal",
-      title: "Customer Support Portal",
-      description:
-        "Unified portal for all customers to receive help, support, get their doubts cleared and provide the necessary feedback to the server.",
-      timePeriod: "December 12, 2024 - January 20, 2025",
-      technologies: [
-        "BunJS",
-        "ElysiaJS",
-        "ReactJS",
-        "BetterAuth",
-        "Shadcn/UI",
-        "uWebSockets",
-        "SSE and RESTful API",
-        "Mongoose",
-        "MongoDB",
-        "WebRTC",
-      ],
-      pointsToBeNoted: [
-        "gvabntiuyabnugafv gnuyvnryyurg nsgfruygasnbatvbnisa naudcruitgauiobiartbgvi aunfiuntiunbiiag",
-        "asgybgaibgygaybybfrra iarfbauiufaynofanygvb ainyofyaofipmriosynser inysaovyaoiigv gagbyagyuayeyb",
-        "asufbvgausiuiaterybybavcyritbbtvacsoio iuasybivctysayatvbcyatryavusbtcrutasuebcte",
-      ],
-      urls: [{ href: "", label: "Project Repo" }, { href: "", label: "Live URL"}],
-    },
-  ];
+  const { projects: data } = useContext(PageData);
   return (
     <Section p={"3"} asChild={true} maxWidth={"100%"}>
       <Flex direction={"column"} gap={"5"} width={"100%"}>

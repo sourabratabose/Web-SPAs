@@ -1,7 +1,11 @@
-import { EnvelopeClosedIcon } from "@radix-ui/react-icons";
 import {
+  Cross1Icon,
+  EnvelopeClosedIcon,
+  PaperPlaneIcon,
+} from "@radix-ui/react-icons";
+import {
+  Badge,
   Button,
-  Container,
   Dialog,
   Flex,
   Heading,
@@ -11,8 +15,26 @@ import {
   TextArea,
   TextField,
 } from "@radix-ui/themes";
+import { FormEvent, FormEventHandler, useContext, useState } from "react";
+import { PageData } from "../contexts/PageDataContext";
 
 export default function Contact() {
+  const [sendingMessage, setSendingMessage] = useState<boolean>(false);
+  const [sendStatus, setSendStatus] = useState<"none" | "success" | "fail">(
+    "none"
+  );
+
+  const { contactEmail: data } = useContext(PageData);
+
+  const submitHandler: FormEventHandler<HTMLFormElement> = async (
+    e: FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+
+    setSendingMessage(true);
+    const data: FormData = new FormData(e.currentTarget);
+    setSendingMessage(false);
+  };
   return (
     <Flex
       direction={"column"}
@@ -28,10 +50,11 @@ export default function Contact() {
         weight={"bold"}
         align={{ initial: "center", md: "left" }}
       >
-        Want to work together?
+        Contacts
       </Heading>
       <Text weight={"light"} size={"3"} align={"left"}>
-        You can email me at <Strong>bose.sourabrata21century@gmail.com</Strong>
+        Want to work together ? You can email me at{" "}
+        <Strong>{data}</Strong>
       </Text>
       <Flex align={"center"} justify={"between"} gap={"5"} width={"100%"}>
         <Dialog.Root>
@@ -40,14 +63,26 @@ export default function Contact() {
           </Dialog.Trigger>
 
           <Dialog.Content>
-            <Container align={"center"} size={"2"}>
-              <Dialog.Title>Your Message</Dialog.Title>
-              <Dialog.Description size="2" mb="4">
-                Send me a message and I will get back to you within 2 - 3
-                working days.
-              </Dialog.Description>
-
-              <Flex direction="column" gap="3">
+            <Dialog.Title
+              as={"h3"}
+              size={"5"}
+              color={"gray"}
+              weight={"regular"}
+              align={"left"}
+            >
+              <Flex direction={"row"} justify={"between"} align={"center"}>
+                Your Message
+                <Dialog.Close>
+                  <Cross1Icon color={"gray"} />
+                </Dialog.Close>
+              </Flex>
+            </Dialog.Title>
+            <Dialog.Description size="2" mb="4">
+              Send me a message and I will get back to you within 2 - 3 working
+              days.
+            </Dialog.Description>
+            <form onSubmit={submitHandler}>
+              <Flex direction={"column"} gap={"3"}>
                 <label>
                   <Text as="div" size="2" mb="1" weight="bold">
                     Your Name
@@ -83,11 +118,22 @@ export default function Contact() {
                     Cancel
                   </Button>
                 </Dialog.Close>
-                <Dialog.Close>
-                  <Button>Submit</Button>
-                </Dialog.Close>
+                {sendStatus == "none" ? (
+                  <Button
+                    type="submit"
+                    loading={sendingMessage}
+                    disabled={sendingMessage}
+                    size={"2"}
+                  >
+                    Subscribe <PaperPlaneIcon />
+                  </Button>
+                ) : sendStatus == "success" ? (
+                  <Badge color={"grass"}>Sign up successful</Badge>
+                ) : (
+                  <Badge color={"ruby"}>Failed to signup</Badge>
+                )}
               </Flex>
-            </Container>
+            </form>
           </Dialog.Content>
         </Dialog.Root>
         <Link href={""} underline={"hover"} asChild={true}>

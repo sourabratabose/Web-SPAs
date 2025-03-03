@@ -12,11 +12,17 @@ import Education from "./components/Education";
 import CodingProfiles from "./components/CodingProfiles";
 import Certifications from "./components/Certifications";
 import Projects from "./components/Projects";
+import Newsletter from "./components/Newsletter";
 
 function App() {
   const { currentTheme }: ThemeContextData = useContext(ThemePresets);
   return (
-    <Theme appearance={currentTheme} accentColor={"iris"} grayColor={"gray"} radius={"medium"}>
+    <Theme
+      appearance={currentTheme}
+      accentColor={"iris"}
+      grayColor={"gray"}
+      radius={"medium"}
+    >
       <Header />
       <Container align={"center"} size={"4"}>
         <Flex
@@ -27,9 +33,16 @@ function App() {
           mx={"5"}
           mt={"80px"}
         >
-          <Box minWidth={{ md: "448px" }} width={"100%"} px={"3"} position={{ initial: "static", md: "sticky" }} top={"80px"}>
+          <Box
+            minWidth={{ md: "448px" }}
+            width={"100%"}
+            px={"3"}
+            position={{ initial: "static", md: "sticky" }}
+            top={"80px"}
+          >
             <Hero />
             <Contact />
+            <Newsletter />
           </Box>
           <Flex
             gap={"5"}
@@ -39,10 +52,10 @@ function App() {
           >
             <About />
             <Skills />
-            <Projects/>
+            <Projects />
             <Education />
             <CodingProfiles />
-            <Certifications/>
+            <Certifications />
           </Flex>
         </Flex>
       </Container>

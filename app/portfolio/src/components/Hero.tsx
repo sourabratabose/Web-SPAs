@@ -15,10 +15,13 @@ import {
   Link,
   Text,
 } from "@radix-ui/themes";
+import { useContext } from "react";
+import { PageData } from "../contexts/PageDataContext";
 
 export default function Hero() {
+  const { hero: data } = useContext(PageData);
   return (
-    <Card>
+    <Card className={"shadow-iris-a5/60 shadow-lg"}>
       <Flex
         align={{ initial: "center", md: "start" }}
         justify={"center"}
@@ -45,7 +48,7 @@ export default function Hero() {
           weight={"regular"}
           align={{ initial: "center", md: "left" }}
         >
-          Fullstack Web 2 & 3 Developer
+          {data.job}
         </Heading>
         <Heading
           as={"h3"}
@@ -56,12 +59,11 @@ export default function Hero() {
           align={"left"}
         >
           <SewingPinFilledIcon className="text-red-700 h-6 w-6 " />
-          {"Kolkata, WB, India"}
-          <Text className="font-mono">IN</Text>
+          {data.location}
+          <Text className="font-mono">{data.countrySymbol}</Text>
         </Heading>
         <Text weight={"light"} size={"3"} align={"left"}>
-          A passionate fullstack web developer building bleeding edge tech
-          projects in Typescript and Rust for people.
+          {data.description}
         </Text>
         <Flex align={"center"} justify={"between"} gap={"5"} width={"100%"}>
           <Link download={true} href="">

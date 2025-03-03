@@ -68,6 +68,9 @@ class MessageRequest {
     if (validId.success) this._messageId = newId;
     else throw new Error(validId.error.message);
   }
+
+  // DB interactions
+  
 } 
 
 // Exports

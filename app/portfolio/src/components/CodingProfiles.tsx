@@ -7,20 +7,12 @@ import {
   Avatar,
   Link,
 } from "@radix-ui/themes";
-import CodeProfileData from "../types/CodingProfileData";
 import { Link2Icon } from "@radix-ui/react-icons";
+import { useContext } from "react";
+import { PageData } from "../contexts/PageDataContext";
 
 export default function CodingProfiles() {
-  const data: CodeProfileData[] = [
-    {
-      rank: "1432",
-      platform: "Geeks for Geeks",
-      url: "",
-      peakRank: "1680",
-      img: "",
-      imgFallback: "GFG"
-    }
-  ];
+  const { codingProfile: data } = useContext(PageData);
   return (
     <Section p={"3"} asChild={true}>
       <Flex direction={"column"} gap={"5"} width={"100%"}>
@@ -29,7 +21,11 @@ export default function CodingProfiles() {
         </Heading>
         {data.map((val, idx) => (
           <Blockquote size={"3"} wrap={"pretty"} key={idx}>
-            <Flex direction={{initial: "column", sm: "row"}} mb={"1"} gap={"3"}>
+            <Flex
+              direction={{ initial: "column", sm: "row" }}
+              mb={"1"}
+              gap={"3"}
+            >
               <Avatar src={val.img} fallback={val.imgFallback} size={"5"} />
               <Flex
                 direction={"column"}
@@ -37,7 +33,13 @@ export default function CodingProfiles() {
                 justify={"center"}
                 gap={"3"}
               >
-                <Heading as={"h1"} size={"8"} weight={"bold"} align={"left"} color={"iris"}>
+                <Heading
+                  as={"h1"}
+                  size={"8"}
+                  weight={"bold"}
+                  align={"left"}
+                  color={"iris"}
+                >
                   {val.platform}
                 </Heading>
                 <Heading

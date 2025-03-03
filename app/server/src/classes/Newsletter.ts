@@ -2,9 +2,11 @@ import { z } from "zod";
 
 // Validators
 const emailValidator = z.string().email();
+const activeValidator = z.boolean();
+const dateValidator = z.date();
 const updateValidator = z.object({
-  update: z.string(),
-  date: z.date()
+  update: z.enum(['subscribe', 'unsubscribe']),
+  date: z.date(),
 });
 const arrayOfUpdatesValidator = z.array(updateValidator);
 
@@ -16,13 +18,25 @@ class Newsletter {
   private readonly _email: z.infer<typeof emailValidator>;
   private readonly _signUpDate: Date;
   private _updates: z.infer<typeof arrayOfUpdatesValidator>;
+  private _active: z.infer<typeof activeValidator>;
 
-  public constructor(email: string, updates: Update[] = []) {
+  public constructor(
+    email: typeof this._email,
+    active: typeof this._active = true,
+    signUpDate: typeof this._signUpDate = new Date(),
+    updates: typeof this._updates = []
+  ) {
     const verifiedEmail = emailValidator.safeParse(email);
     if (verifiedEmail.success) this._email = verifiedEmail.data;
     else throw new Error(verifiedEmail.error.message);
-    
-    this._signUpDate = new Date();
+
+    const verifiedActive = activeValidator.safeParse(active);
+    if (verifiedActive.success) this._active = verifiedActive.data;
+    else throw new Error(verifiedActive.error.message);
+
+    const verifiedDate = dateValidator.safeParse(signUpDate);
+    if (verifiedDate.success) this._signUpDate = verifiedDate.data;
+    else throw new Error(verifiedDate.error.message);
 
     const verifiedUpdates = arrayOfUpdatesValidator.safeParse(updates);
     if (verifiedUpdates.success) this._updates = updates;
@@ -40,28 +54,26 @@ class Newsletter {
   public get updates(): typeof this._updates {
     return this._updates;
   }
+  public get active(): typeof this._active {
+    return this._active
+  }
 
   // Setters
-  public set updates(updates: typeof this._updates) {
-    const verifiedUpdates = arrayOfUpdatesValidator.safeParse(updates);
+  public set updates(newUpdates: typeof this._updates) {
+    const verifiedUpdates = arrayOfUpdatesValidator.safeParse(newUpdates);
 
     if (verifiedUpdates.success) this._updates = verifiedUpdates.data;
     else throw new Error(verifiedUpdates.error.message);
   }
+  public set active(newActive: typeof this._active) {
+    const verifiedActive = activeValidator.safeParse(newActive);
 
-  // Methods
-  public addUpdate(newUpdate: Update): typeof this._updates {
-    const verifiedUpdate = updateValidator.safeParse(newUpdate);
+    if (verifiedActive.success) this._active = verifiedActive.data;
+    else throw new Error(verifiedActive.error.message);
+  }
 
-    if (verifiedUpdate.success) {
-      this._updates.push(verifiedUpdate.data);
-      return this._updates
-    } else throw new Error(verifiedUpdate.error.message);
-  }
-  public deleteLastUpdate(): typeof this._updates {
-    this._updates.pop()
-    return this._updates;
-  }
+  // DB interactions
+  public commitToDB() {}
 }
 
 // Exports

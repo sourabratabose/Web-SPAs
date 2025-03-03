@@ -2,8 +2,8 @@ import { Accordion } from "radix-ui";
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { Heading, Separator, Text } from "@radix-ui/themes";
-import SendMessage from "./utils/SendMessage/SendMessage";
-import NewsletterSignUp from "./utils/NewsletterSignUp/NewsletterSignUp";
+import Message from "./utils/Message";
+import Newsletter from "./utils/Newsletter";
 
 export default function Actions() {
   const [expanded, setExpanded] = useState<string[]>(["2"]);
@@ -50,7 +50,7 @@ export default function Actions() {
             Fill out the form and I will get back to you, within 2 - 3
             working days. Or schedule a virtual meet!
           </Text>
-          <SendMessage />
+          <Message />
         </Accordion.Content>
       </Accordion.Item>
       <Separator size={"4"}/>
@@ -88,7 +88,7 @@ export default function Actions() {
             Interested to know about my latest technological works and
             explorations? Sign up for my newsletter below !
           </Text>
-          <NewsletterSignUp />
+          <Newsletter />
         </Accordion.Content>
       </Accordion.Item>
     </Accordion.Root>

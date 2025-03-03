@@ -7,38 +7,11 @@ import {
   Button,
   Avatar,
 } from "@radix-ui/themes";
-import EducationData from "../types/EducationData";
+import { useContext } from "react";
+import { PageData } from "../contexts/PageDataContext";
 
 export default function Education() {
-  const data: EducationData[] = [
-    {
-      degree: "Bachelor of Computer Science",
-      img: "",
-      imgFallback: "IIITK",
-      institute: "Indian Institute of Information Technology, Kalyani",
-      timePeriod: "December 2021 - July 2025",
-      lessons: [
-        "Linear Algebra",
-        "Differential Calculus",
-        "Statistics and Probability",
-        "Digital Logic",
-        "Computer Organization and Architecture",
-        "Microprocessor and Microcontroller",
-        "Data Structures and Algorithms",
-        "Operating Systems",
-        "Computer Networks",
-        "Compiler Design",
-        "Database System Management and Administration"
-      ],
-    }, {
-      degree: "Diploma in Science",
-      img: "",
-      imgFallback: "APJS",
-      institute: "Apeejay School, Salt Lake",
-      timePeriod: "March 2018 - June 2020",
-      lessons: ["Physics", "Chemistry", "Biology", "Maths", "English", "Computer Education"]
-    }
-  ];
+  const { education: data } = useContext(PageData);
   return (
     <Section p={"3"} asChild={true}>
       <Flex direction={"column"} gap={"5"} width={"100%"}>

@@ -4,17 +4,19 @@
   "scripts": {
     "db:init": "pg_ctl init --pgdata=./data",
     "db:start": "pg_ctl start --pgdata=./data --log=./db.log",
-    "db:reload": "pg_ctl restart --pgdata=./data --log=./db.log",
+    "db:restart": "pg_ctl restart --pgdata=./data --log=./db.log",
     "db:stop": "pg_ctl stop --pgdata=./data",
     "db:list": "psql --list",
-    "db:interactive": "psql --host=localhost --port=5432 public_spas",
-    "db:interactive:auth": "psql --host=localhost --port=5432 --username=sbose --password public_spas",
+    "db:inter": "psql --host=localhost --port=5432 public_spas",
+    "db:inter:auth": "psql --host=localhost --port=5432 --username=sbose --password public_spas",
+    "schema:gen": "bun drizzle-kit generate",
+    "schema:migrate": "bun drizzle-kit migrate",
     "dev": "bun --env-file=./.env run --watch src/index.ts"
   },
   "dependencies": {
     "drizzle": "^1.4.0",
     "drizzle-orm": "^0.40.0",
-    "drizzle-typebox": "^0.3.0",
+    "drizzle-zod": "^0.7.0",
     "elysia": "latest",
     "postgres": "^3.4.5",
     "typebox": "^0.0.1",

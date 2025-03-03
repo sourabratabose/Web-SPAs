@@ -8,19 +8,11 @@ import {
   Link,
 } from "@radix-ui/themes";
 import { Link2Icon } from "@radix-ui/react-icons";
-import Certification from "../types/CertificationData";
+import { useContext } from "react";
+import { PageData } from "../contexts/PageDataContext";
 
 export default function Certifications() {
-  const data: Certification[] = [
-    {
-      img: "",
-      imgFallback: "AWS",
-      certifiedBy: "Amazon Web Services",
-      url: "",
-      subject: "AWS Cloud Practitioner",
-      date: "March 28, 2025"
-    }
-  ];
+  const { certification: data } = useContext(PageData);
   return (
     <Section p={"3"} asChild={true}>
       <Flex direction={"column"} gap={"5"} width={"100%"}>

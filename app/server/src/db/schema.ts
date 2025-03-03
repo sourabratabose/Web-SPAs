@@ -1,10 +1,18 @@
-import { date, integer, pgEnum, pgTable, varchar } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  date,
+  integer,
+  pgEnum,
+  pgTable,
+  varchar,
+} from "drizzle-orm/pg-core";
 
 export const newsletterUpdates = pgEnum("update", ["unsubscribe", "subscribe"]);
 
 export const newsletterSchema = pgTable("newsletterUser", {
   email: varchar({ length: 50 }).notNull().primaryKey(),
   signUpDate: date().notNull().defaultNow(),
+  active: boolean().notNull().default(true),
 });
 
 export const newsletterUpdatesSchema = pgTable("newsletterUpdates", {
