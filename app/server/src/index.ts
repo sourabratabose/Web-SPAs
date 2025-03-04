@@ -1,34 +1,145 @@
-// Import
-import { Elysia } from "elysia";
-import MessageRequest, { messageRequestValidator } from "./classes/MessageRequest";
+import staticPlugin from "@elysiajs/static";
+import { cors } from "@elysiajs/cors";
+import { file } from "bun";
+import { Elysia, t } from "elysia";
+import db from "../db/db";
+import { messageRequestsSchema, newsletterUsersSchema } from "../db/schema";
+import { eq } from "drizzle-orm";
 
-// Instances
-const app = new Elysia();
+const app = new Elysia()
+  // .use(cors({
+  //   origin: true
+  // }))
+  .use(
+    staticPlugin({
+      assets: "../../dist/links/assets",
+      prefix: "/assets",
+    })
+  )
+  .get("/", file("../../dist/links/index.html"))
+  .use(
+    staticPlugin({
+      assets: "../../dist/portfolio/assets",
+      prefix: "/portfolio/assets",
+    })
+  )
+  .get("/portfolio", file("../../dist/portfolio/index.html"))
+  .group("/api", (app) =>
+    app
+      .post(
+        "/newsletter",
+        async (c) => {
+          try {
+            if (c.body.action == "subscribe") {
+              await db
+                .insert(newsletterUsersSchema)
+                .values({
+                  email: c.body.email,
+                  signUpDate: new Date().toDateString(),
+                  active: true,
+                })
+                .returning({
+                  email: newsletterUsersSchema.email,
+                })
+                .onConflictDoNothing({
+                  target: newsletterUsersSchema.email,
+                });
+            } else if (c.body.action == "unsubscribe") {
+              await db
+                .update(newsletterUsersSchema)
+                .set({
+                  active: false,
+                })
+                .where(eq(newsletterUsersSchema.email, c.body.email));
+            }
+          } catch (e) {
+            console.log("Newsletter update error : ", e);
+            return {
+              success: false,
+            };
+          }
+          return {
+            success: true,
+          };
+        },
+        {
+          body: t.Object({
+            action: t.Readonly(
+              t.Union([t.Literal("subscribe"), t.Literal("unsubscribe")])
+            ),
+            email: t.Readonly(
+              t.String({
+                format: "email",
+                minLength: 5,
+                maxLength: 100,
+              })
+            ),
+          }),
+          response: t.Object({
+            success: t.Boolean(),
+          }),
+        }
+      )
+      .post(
+        "/message",
+        async (c) => {
+          try {
+            await db.insert(messageRequestsSchema).values({
+              name: c.body.name,
+              companyName:
+                c.body.companyName != undefined ? c.body.companyName : null,
+              email: c.body.email,
+              message: c.body.message,
+            });
+          } catch (e) {
+            console.error("Message insert error occurred : ", e);
+            return {
+              delivered: false,
+            };
+          }
+          return {
+            delivered: true,
+          };
+        },
+        {
+          body: t.Object({
+            name: t.Readonly(
+              t.String({
+                minLength: 5,
+                maxLength: 100,
+              })
+            ),
+            email: t.Readonly(
+              t.String({
+                format: "email",
+                minLength: 5,
+                maxLength: 100,
+              })
+            ),
+            companyName: t.ReadonlyOptional(
+              t.String({
+                minLength: 5,
+                maxLength: 100,
+              })
+            ),
+            message: t.Readonly(
+              t.String({
+                minLength: 5,
+                maxLength: 300,
+              })
+            ),
+          }),
+          response: t.Object({
+            delivered: t.Boolean(),
+          }),
+        }
+      )
+  )
+  .listen(4000);
 
-//Configuration
-app.all("/*", ({ error }) => error(501, "Not Implemented"));
+console.log(
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
+);
 
-app.group("/api", (app) => {
-  app.post("/messageRequest", ({ body, set, headers, error }) => {
-    if (headers["Content-Type"] != "application/json" || typeof body != "string") return error(400, "Bad Request")
-    try {
-      const { success, data, error } = messageRequestValidator.safeParse(JSON.parse(body));
-      let newMessage = null;
-      if (success) newMessage = new MessageRequest(data.name, data.companyName, data.email, data.message);
-      else throw new Error(error.message);
-      
-    } catch (e) {
-      console.log(e)
-    }
-  });
-  app.post("/newsletterSubscribe", ({ body, set }) => { });
-  app.post("/newsletterUnsubscribe", ({ body, set }) => {});
-  return app;
-})
-
-// Starting server
-app.listen(3000, () => {
-  console.log(
-    `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-  );
-});
+type App = typeof app;
+export default App;

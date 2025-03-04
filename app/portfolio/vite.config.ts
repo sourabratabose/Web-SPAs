@@ -4,8 +4,12 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   root: "./",
+  server: {
+    port: 6000
+  },
   build: {
-    outDir: "./dist",
+    emptyOutDir: true,
+    outDir: "../../dist/portfolio",
   },
   plugins: [tailwindcss(), react()],
 });

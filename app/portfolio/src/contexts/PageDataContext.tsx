@@ -1,12 +1,9 @@
 import {
   Context,
   createContext,
-  ReactNode,
-  useEffect,
-  useState,
+  ReactNode
 } from "react";
 import type PageData from "../types/PageDataContext";
-import unifiedAxiosInstance from "../function/AxiosInstance";
 
 const defaultValue: PageData = {
   hero: {
@@ -166,14 +163,6 @@ const defaultValue: PageData = {
 
 export const PageData: Context<PageData> = createContext<PageData>(defaultValue);
 
-export default function PageDataContext({ children }: { children: ReactNode }) {
-  const [data, setData] = useState<PageData>(defaultValue);
-  useEffect(() => {
-    (async () => {
-      const networkResponse = await unifiedAxiosInstance.get("/portfolio");;
-      if (networkResponse.status < 300) setData(networkResponse.data satisfies PageData);
-      else console.error("Data shown may be stale");
-    })();
-  }, []);
-  return <PageData.Provider value={data}>{children}</PageData.Provider>;
+export default function PageDataContext({ children }: { children: ReactNode }) {  
+  return <PageData.Provider value={defaultValue}>{children}</PageData.Provider>;
 }

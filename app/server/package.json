@@ -2,29 +2,24 @@
   "name": "server",
   "version": "1.0.50",
   "scripts": {
-    "db:init": "pg_ctl init --pgdata=./data",
-    "db:start": "pg_ctl start --pgdata=./data --log=./db.log",
-    "db:restart": "pg_ctl restart --pgdata=./data --log=./db.log",
-    "db:stop": "pg_ctl stop --pgdata=./data",
-    "db:list": "psql --list",
-    "db:inter": "psql --host=localhost --port=5432 public_spas",
-    "db:inter:auth": "psql --host=localhost --port=5432 --username=sbose --password public_spas",
     "schema:gen": "bun drizzle-kit generate",
-    "schema:migrate": "bun drizzle-kit migrate",
-    "dev": "bun --env-file=./.env run --watch src/index.ts"
+    "schema:mig": "bun drizzle-kit migrate",
+    "schema:push": "bun drizzle-kit push",
+    "schema:host": "bun drizzle-kit studio --verbose --port=3000 --host=localhost",
+    "dev": "bun run --env-file=./.env --watch ./src/index.ts",
+    "prod": "bun run --env-file=./.env ../../dist/server/index.js",
+    "build": "bun build ./src/index.ts --outdir ../../dist/server --target=bun"
   },
   "dependencies": {
-    "drizzle": "^1.4.0",
+    "@elysiajs/cors": "^1.2.0",
+    "@elysiajs/static": "^1.2.0",
+    "bun": "^1.2.4",
+    "drizzle-kit": "^0.30.5",
     "drizzle-orm": "^0.40.0",
-    "drizzle-zod": "^0.7.0",
-    "elysia": "latest",
-    "postgres": "^3.4.5",
-    "typebox": "^0.0.1",
-    "zod": "^3.24.2"
+    "elysia": "latest"
   },
   "devDependencies": {
-    "bun-types": "latest",
-    "drizzle-kit": "^0.30.5"
+    "bun-types": "latest"
   },
   "module": "src/index.js"
 }

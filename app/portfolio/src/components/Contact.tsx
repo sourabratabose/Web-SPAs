@@ -17,6 +17,8 @@ import {
 } from "@radix-ui/themes";
 import { FormEvent, FormEventHandler, useContext, useState } from "react";
 import { PageData } from "../contexts/PageDataContext";
+import messageSend, { messageSchema } from "../function/MessageSend";
+
 
 export default function Contact() {
   const [sendingMessage, setSendingMessage] = useState<boolean>(false);
@@ -30,10 +32,20 @@ export default function Contact() {
     e: FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
-
     setSendingMessage(true);
-    const data: FormData = new FormData(e.currentTarget);
-    setSendingMessage(false);
+    try {
+      const formObject = Object.fromEntries(new FormData(e.currentTarget));
+      const data = messageSchema.parse(formObject);
+
+      const success: boolean = await messageSend(data);
+      if (success) setSendStatus("success");
+      else setSendStatus("fail");
+      setTimeout(() => setSendStatus("none"), 5000)
+    } catch (e) {
+      console.error("Error while parsing message : ", e)
+    } finally {
+      setSendingMessage(false);
+    }
   };
   return (
     <Flex
@@ -53,8 +65,7 @@ export default function Contact() {
         Contacts
       </Heading>
       <Text weight={"light"} size={"3"} align={"left"}>
-        Want to work together ? You can email me at{" "}
-        <Strong>{data}</Strong>
+        Want to work together ? You can email me at <Strong>{data}</Strong>
       </Text>
       <Flex align={"center"} justify={"between"} gap={"5"} width={"100%"}>
         <Dialog.Root>
@@ -87,13 +98,16 @@ export default function Contact() {
                   <Text as="div" size="2" mb="1" weight="bold">
                     Your Name
                   </Text>
-                  <TextField.Root placeholder="Enter your full name" />
+                  <TextField.Root
+                    placeholder="Enter your full name"
+                    name="name"
+                  />
                 </label>
                 <label>
                   <Text as="div" size="2" mb="1" weight="bold">
                     Contact E-Mail
                   </Text>
-                  <TextField.Root placeholder="Enter your email" />
+                  <TextField.Root placeholder="Enter your email" name="email" />
                 </label>
                 <label>
                   <Text as="div" size="2" mb="1" weight="bold">
@@ -102,13 +116,16 @@ export default function Contact() {
                       ( Optional )
                     </Text>
                   </Text>
-                  <TextField.Root placeholder="Enter your company name" />
+                  <TextField.Root
+                    placeholder="Enter your company name"
+                    name="companyName"
+                  />
                 </label>
                 <label>
                   <Text as="div" size="2" mb="1" weight="bold">
                     Your Message
                   </Text>
-                  <TextArea placeholder="Your Message..." />
+                  <TextArea placeholder="Your Message..." name="message" />
                 </label>
               </Flex>
 

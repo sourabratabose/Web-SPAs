@@ -5,6 +5,13 @@
   "devDependencies": {
     "@types/bun": "latest"
   },
+  "scripts": {
+    "db:init": "initdb --pgdata=./dist/data --auth-local=trust --username=sbose --pwprompt",
+    "db:start": "pg_ctl start --pgdata=./dist/data -l ./dist/db.log",
+    "db:stop": "pg_ctl stop --pgdata=./dist/data",
+    "db:reload": "pg_ctl reload --pgdata=./dist/data -l ./dist/db.log",
+    "db:status": "pg_ctl status --pgdata=./dist/data"
+  },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },

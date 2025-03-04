@@ -14,6 +14,7 @@ import {
   Badge,
 } from "@radix-ui/themes";
 import { FormEvent, FormEventHandler, useState } from "react";
+import messageSend, { messageSchema } from "../../functions/MessageSend";
 
 export default function Message() {
   const [sendingMessage, setSendingMessage] = useState<boolean>(false);
@@ -25,10 +26,20 @@ export default function Message() {
     e: FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
-
     setSendingMessage(true);
-    const data: FormData = new FormData(e.currentTarget);
-    setSendingMessage(false);
+    try {
+      const formObject = Object.fromEntries(new FormData(e.currentTarget));
+      const data = messageSchema.parse(formObject);
+
+      const response = await messageSend(data);
+      if (response) setSendStatus("success")
+      else setSendStatus("fail");
+      setTimeout(() => setSendStatus("none"), 5000)
+    } catch (e) {
+      console.error("Failed parsing the email : ", e)
+    } finally {
+      setSendingMessage(false);
+    }
   };
 
   return (
@@ -38,7 +49,7 @@ export default function Message() {
           <Text as="div" size="2" mb="1" weight="bold">
             Your Name
           </Text>
-          <TextField.Root placeholder="Enter your full name">
+          <TextField.Root placeholder="Enter your full name" name="name">
             <TextField.Slot>
               <PersonIcon />
             </TextField.Slot>
@@ -48,7 +59,7 @@ export default function Message() {
           <Text as="div" size="2" mb="1" weight="bold">
             Contact E-Mail
           </Text>
-          <TextField.Root placeholder="Enter your email">
+          <TextField.Root placeholder="Enter your email" name="email">
             <TextField.Slot>
               <EnvelopeClosedIcon />
             </TextField.Slot>
@@ -61,13 +72,16 @@ export default function Message() {
               ( Optional )
             </Text>
           </Text>
-          <TextField.Root placeholder="Enter your company name" />
+          <TextField.Root
+            placeholder="Enter your company name"
+            name="companyName"
+          />
         </label>
         <label>
           <Text as="div" size="2" mb="1" weight="bold">
             Your Message
           </Text>
-          <TextArea placeholder="Your Message..." />
+          <TextArea placeholder="Your Message..." name="message" />
         </label>
       </Flex>
       <Flex
@@ -83,13 +97,22 @@ export default function Message() {
           </Button>
         </Link>
         {sendStatus == "none" ? (
-          <Button type="submit" loading={sendingMessage} disabled={sendingMessage} size={"2"}>
+          <Button
+            type="submit"
+            loading={sendingMessage}
+            disabled={sendingMessage}
+            size={"2"}
+          >
             Subscribe <PaperPlaneIcon />
           </Button>
         ) : sendStatus == "success" ? (
-          <Badge color={"grass"}>Sign up successful</Badge>
+          <Badge color={"grass"} size={"3"}>
+            Sign up successful
+          </Badge>
         ) : (
-          <Badge color={"ruby"}>Failed to signup</Badge>
+          <Badge color={"ruby"} size={"3"}>
+            Failed to signup
+          </Badge>
         )}
       </Flex>
     </form>

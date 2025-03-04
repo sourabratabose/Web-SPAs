@@ -1,6 +1,7 @@
 import { EnvelopeClosedIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
 import { Badge, Button, Flex, TextField } from "@radix-ui/themes";
 import { FormEvent, FormEventHandler, useState } from "react";
+import newsletter, { emailSchema } from "../../functions/NewsletterSignUp";
 
 export default function Newsletter() {
   const [signingUp, setSigningUp] = useState<boolean>(false);
@@ -13,8 +14,19 @@ export default function Newsletter() {
   ) => {
     e.preventDefault();
     setSigningUp(true);
-    const data = new FormData(e.currentTarget);
-    setSigningUp(false);
+    try {
+      const formObject = new FormData(e.currentTarget);
+      const data = emailSchema.parse(formObject.get("email"));
+
+      const response: boolean = await newsletter("subscribe", data);
+      if (response) setSignUpStatus("success");
+      else setSignUpStatus("fail")
+      setTimeout(() => setSignUpStatus("none"), 5000)
+    } catch (e) { 
+      console.log("Error parsing the email : ", e)
+    } finally {
+      setSigningUp(false);
+    }
   };
   return (
     <Flex
@@ -27,7 +39,7 @@ export default function Newsletter() {
       mt={"3"}
     >
       <form onSubmit={submitHandler}>
-        <TextField.Root placeholder="Your E - Mail ID" className="w-full">
+        <TextField.Root placeholder="Your E - Mail ID" className="w-full" name="email">
           <TextField.Slot>
             <EnvelopeClosedIcon />
           </TextField.Slot>
@@ -37,9 +49,9 @@ export default function Newsletter() {
             Subscribe <PaperPlaneIcon />
           </Button>
         ) : signUpStatus == "success" ? (
-          <Badge color={"grass"}>Sign up successful</Badge>
+          <Badge color={"grass"} size={"3"}>Sign up successful</Badge>
         ) : (
-          <Badge color={"ruby"}>Failed to signup</Badge>
+          <Badge color={"ruby"} size={"3"}>Failed to signup</Badge>
         )}
       </form>
     </Flex>
