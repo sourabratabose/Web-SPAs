@@ -19,7 +19,7 @@ export default function Header() {
       <header className="-translate-x-1/2 left-1/2 z-20 backdrop-blur-xl bg-iris-a5/30 shadow-md shadow-iris-a5/60 rounded-b-lg">
         <Heading size={"5"}>
           <Heading size={"5"} weight={"light"} asChild={true}>
-            <span>Sourabrata Bose </span>
+            <span>SBose </span>
           </Heading>
           | Portfolio
         </Heading>
